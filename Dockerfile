@@ -1,11 +1,7 @@
-# Use an official OpenJDK runtime as a parent image
-FROM openjdk:8-jre-alpine
+# Use a modern lightweight Java runtime
+FROM eclipse-temurin:21-jre
 
-# set shell to bash
-# source: https://stackoverflow.com/a/40944512/3128926
-#RUN apk update && apk add bash
-
-# Set the working directory to /app
+# Set working directory inside container
 WORKDIR /app
 
 # Copy the fat jar into the container at /app
@@ -14,6 +10,10 @@ COPY target/*.jar app.jar
 
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
+
+# Ensure Spring Boot listens on all interfaces in container
+ENV SERVER_ADDRESS=0.0.0.0
+ENV SERVER_PORT=8080
 
 # Run jar file when the container launches
 ENTRYPOINT ["java", "-jar", "app.jar"]
